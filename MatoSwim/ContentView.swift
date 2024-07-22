@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var seaTemperature: Double = 0.0
+    @StateObject private var webViewModel = WebViewModel()
 
     var body: some View {
         VStack {
-            Text("Matosinhos sea temperature")
+            Text("Water temperature in Matosinhos")
                 .font(.title)
                 .padding()
 
@@ -21,6 +22,13 @@ struct ContentView: View {
                 .fontWeight(.bold)
 
             Spacer()
+            if let temperature = webViewModel.waterTemperature {
+                Text("\(temperature)°C")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            } else {
+                ProgressView()
+            }
         }
         .padding()
         .onAppear {
@@ -45,6 +53,7 @@ struct ContentView: View {
                     }
                 }
             }
+            webViewModel.loadWebsite()
         }
         task.resume()
     }

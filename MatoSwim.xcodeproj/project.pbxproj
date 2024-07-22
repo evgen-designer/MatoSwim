@@ -11,6 +11,8 @@
 		04EE20692C4F1AC00036A68B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20682C4F1AC00036A68B /* ContentView.swift */; };
 		04EE206B2C4F1AC30036A68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EE206A2C4F1AC30036A68B /* Assets.xcassets */; };
 		04EE206E2C4F1AC30036A68B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EE206D2C4F1AC30036A68B /* Preview Assets.xcassets */; };
+		04EE20762C4F1BDE0036A68B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 04EE20752C4F1BDE0036A68B /* SwiftSoup */; };
+		04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20772C4F1C0F0036A68B /* WebViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,7 @@
 		04EE20682C4F1AC00036A68B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		04EE206A2C4F1AC30036A68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04EE206D2C4F1AC30036A68B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		04EE20772C4F1C0F0036A68B /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04EE20762C4F1BDE0036A68B /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +57,7 @@
 			children = (
 				04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */,
 				04EE20682C4F1AC00036A68B /* ContentView.swift */,
+				04EE20772C4F1C0F0036A68B /* WebViewModel.swift */,
 				04EE206A2C4F1AC30036A68B /* Assets.xcassets */,
 				04EE206C2C4F1AC30036A68B /* Preview Content */,
 			);
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = MatoSwim;
+			packageProductDependencies = (
+				04EE20752C4F1BDE0036A68B /* SwiftSoup */,
+			);
 			productName = MatoSwim;
 			productReference = 04EE20632C4F1AC00036A68B /* MatoSwim.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = 04EE205A2C4F1AC00036A68B;
+			packageReferences = (
+				04EE20742C4F1BDE0036A68B /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 04EE20642C4F1AC00036A68B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04EE20692C4F1AC00036A68B /* ContentView.swift in Sources */,
+				04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */,
 				04EE20672C4F1AC00036A68B /* MatoSwimApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +356,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		04EE20742C4F1BDE0036A68B /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04EE20752C4F1BDE0036A68B /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04EE20742C4F1BDE0036A68B /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 04EE205B2C4F1AC00036A68B /* Project object */;
 }
