@@ -13,6 +13,7 @@
 		04EE206E2C4F1AC30036A68B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EE206D2C4F1AC30036A68B /* Preview Assets.xcassets */; };
 		04EE20762C4F1BDE0036A68B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 04EE20752C4F1BDE0036A68B /* SwiftSoup */; };
 		04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20772C4F1C0F0036A68B /* WebViewModel.swift */; };
+		04EE207A2C4F1DCA0036A68B /* matosinhos_water_temperatures.json in Resources */ = {isa = PBXBuildFile; fileRef = 04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		04EE206A2C4F1AC30036A68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04EE206D2C4F1AC30036A68B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		04EE20772C4F1C0F0036A68B /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
+		04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = matosinhos_water_temperatures.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 				04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */,
 				04EE20682C4F1AC00036A68B /* ContentView.swift */,
 				04EE20772C4F1C0F0036A68B /* WebViewModel.swift */,
+				04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */,
 				04EE206A2C4F1AC30036A68B /* Assets.xcassets */,
 				04EE206C2C4F1AC30036A68B /* Preview Content */,
 			);
@@ -136,6 +139,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04EE207A2C4F1DCA0036A68B /* matosinhos_water_temperatures.json in Resources */,
 				04EE206E2C4F1AC30036A68B /* Preview Assets.xcassets in Resources */,
 				04EE206B2C4F1AC30036A68B /* Assets.xcassets in Resources */,
 			);
