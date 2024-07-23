@@ -25,7 +25,7 @@ class WebViewModel: NSObject, ObservableObject {
         Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { [weak self] _ in
             self?.checkTemperature()
         }
-
+        
         // Load initial temperature from JSON file
         fetchInitialTemperature()
     }
@@ -75,6 +75,10 @@ class WebViewModel: NSObject, ObservableObject {
                         self.waterTemperature = newTemperature
                         self.lastUpdated = self.getCurrentTime()
                         self.temperatureLog.append(newTemperature)
+                        
+                        // Save the new temperature to UserDefaults
+                        UserDefaults.standard.set(newTemperature, forKey: "lastWaterTemperature")
+                        UserDefaults.standard.set(self.lastUpdated, forKey: "lastUpdatedTime")
                     }
                 }
             }
@@ -89,6 +93,15 @@ class WebViewModel: NSObject, ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm:ss"
         return dateFormatter.string(from: Date())
+    }
+    
+    func loadSavedTemperature() {
+        if let savedTemp = UserDefaults.standard.string(forKey: "lastWaterTemperature") {
+            self.waterTemperature = savedTemp
+        }
+        if let savedTime = UserDefaults.standard.string(forKey: "lastUpdatedTime") {
+            self.lastUpdated = savedTime
+        }
     }
 }
 

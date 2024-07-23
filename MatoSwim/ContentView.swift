@@ -40,11 +40,12 @@ struct ContentView: View {
             }
             .padding(.top)
         }
-        .onAppear {
-            webViewModel.checkTemperature()
+                .onAppear {
+                    webViewModel.loadSavedTemperature()
+                    webViewModel.checkTemperature()
+                }
+            }
         }
-    }
-}
 
 #Preview {
     ContentView()
