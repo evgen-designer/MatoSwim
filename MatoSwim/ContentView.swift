@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var webViewModel = WebViewModel()
+    @State private var showingThresholdAlert = false
+    @State private var thresholdInput = ""
     
     var body: some View {
         VStack {
@@ -39,13 +41,32 @@ struct ContentView: View {
                 Text("Refresh")
             }
             .padding(.top)
+            
+            Button(action: {
+                showingThresholdAlert = true
+            }) {
+                Text("Set Temperature Threshold")
+            }
+            .padding(.top)
         }
-                .onAppear {
-                    webViewModel.loadSavedTemperature()
-                    webViewModel.checkTemperature()
+        .alert("Set Temperature Threshold", isPresented: $showingThresholdAlert) {
+            TextField("Temperature", text: $thresholdInput)
+                .keyboardType(.decimalPad)
+            Button("OK") {
+                if let threshold = Double(thresholdInput) {
+                    webViewModel.temperatureThreshold = threshold
                 }
             }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Enter the temperature threshold for notifications")
         }
+        .onAppear {
+            webViewModel.loadSavedTemperature()
+            webViewModel.checkTemperature()
+        }
+    }
+}
 
 #Preview {
     ContentView()

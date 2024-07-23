@@ -33,6 +33,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
+        // Wait for the temperature check to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             print("Background refresh completed")
             task.setTaskCompleted(success: true)

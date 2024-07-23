@@ -15,6 +15,15 @@ struct MatoSwimApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                        if granted {
+                            print("Notification permission granted")
+                        } else if let error = error {
+                            print("Error requesting notification permission: \(error)")
+                        }
+                    }
+                }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {

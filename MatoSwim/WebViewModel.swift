@@ -5,6 +5,7 @@
 //  Created by Mac on 23/07/2024.
 //
 
+import UserNotifications
 import WebKit
 import SwiftSoup
 import Foundation
@@ -13,12 +14,27 @@ class WebViewModel: NSObject, ObservableObject {
     private let webView: WKWebView
     @Published var waterTemperature: String?
     @Published var lastUpdated: String?
+    @Published var temperatureThreshold: Double = 16.0 {
+        didSet {
+            UserDefaults.standard.set(temperatureThreshold, forKey: "temperatureThreshold")
+        }
+    }
     private var temperatureLog: [String] = []
     
     override init() {
         let config = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: config)
+        
+        // Initialize temperatureThreshold before calling super.init()
+        self.temperatureThreshold = UserDefaults.standard.double(forKey: "temperatureThreshold")
+        
         super.init()
+        
+        // If there's no saved threshold, use the default value
+        if self.temperatureThreshold == 0 {
+            self.temperatureThreshold = 16.0
+        }
+        
         webView.navigationDelegate = self
         
         // Load temperature every 15 minutes in the background
@@ -86,9 +102,9 @@ class WebViewModel: NSObject, ObservableObject {
                 print("Found temperature text: \(tempText)")
                 
                 let temperatureInt = Int(tempText.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-                let temperatureFloat = Float(temperatureInt) / 10.0
+                let temperatureDouble = Double(temperatureInt) / 10.0  // Changed to Double
                 DispatchQueue.main.async {
-                    let newTemperature = String(format: "%.1f", temperatureFloat)
+                    let newTemperature = String(format: "%.1f", temperatureDouble)
                     // Only update if the new temperature is different
                     if newTemperature != self.waterTemperature {
                         self.waterTemperature = newTemperature
@@ -100,6 +116,11 @@ class WebViewModel: NSObject, ObservableObject {
                         UserDefaults.standard.set(self.lastUpdated, forKey: "lastUpdatedTime")
                         
                         print("New temperature: \(newTemperature) at \(Date())")
+                        
+                        // Check if temperature exceeds threshold
+                        if temperatureDouble > self.temperatureThreshold {
+                            self.sendNotification(temperature: temperatureDouble)
+                        }
                     }
                 }
             } else {
@@ -109,8 +130,7 @@ class WebViewModel: NSObject, ObservableObject {
             DispatchQueue.main.async {
                 print("Error parsing HTML: \(error)")
             }
-        }
-    }
+        }    }
     
     private func getCurrentTime() -> String {
         let dateFormatter = DateFormatter()
@@ -126,6 +146,21 @@ class WebViewModel: NSObject, ObservableObject {
             self.lastUpdated = savedTime
         }
     }
+    
+    private func sendNotification(temperature: Double) {
+        let content = UNMutableNotificationContent()
+        content.title = "Water Temperature Alert"
+        content.body = "The water temperature in Matosinhos is now \(String(format: "%.1f", temperature))°C!"
+        content.sound = UNNotificationSound.default
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error sending notification: \(error)")
+            }
+        }
+    }
 }
 
 extension WebViewModel: WKNavigationDelegate {
@@ -138,7 +173,7 @@ extension WebViewModel: WKNavigationDelegate {
             self?.parseHTML(html)
         }
     }
-
+    
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         print("Web view failed to load: \(error.localizedDescription)")
     }
