@@ -14,11 +14,16 @@ class WebViewModel: NSObject, ObservableObject {
     private let webView: WKWebView
     @Published var waterTemperature: String?
     @Published var lastUpdated: String?
-    @Published var temperatureThreshold: Double = 16.0 {
+    @Published var temperatureThreshold: Double = 18.0 {
         didSet {
             UserDefaults.standard.set(temperatureThreshold, forKey: "temperatureThreshold")
         }
     }
+    @Published var notificationsEnabled: Bool = false {
+            didSet {
+                UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
+            }
+        }
     private var temperatureLog: [String] = []
     
     override init() {
@@ -27,12 +32,13 @@ class WebViewModel: NSObject, ObservableObject {
         
         // Initialize temperatureThreshold before calling super.init()
         self.temperatureThreshold = UserDefaults.standard.double(forKey: "temperatureThreshold")
+        self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
         
         super.init()
         
         // If there's no saved threshold, use the default value
         if self.temperatureThreshold == 0 {
-            self.temperatureThreshold = 16.0
+            self.temperatureThreshold = 18.0
         }
         
         webView.navigationDelegate = self
@@ -148,6 +154,8 @@ class WebViewModel: NSObject, ObservableObject {
     }
     
     private func sendNotification(temperature: Double) {
+        guard notificationsEnabled else { return }
+        
         let content = UNMutableNotificationContent()
         content.title = "Water Temperature Alert"
         content.body = "The water temperature in Matosinhos is now \(String(format: "%.1f", temperature))°C!"
