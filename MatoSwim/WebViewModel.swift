@@ -26,34 +26,48 @@ class WebViewModel: NSObject, ObservableObject {
             self?.checkTemperature()
         }
         
-        // Load initial temperature from JSON file
+        // Load initial temperature
         fetchInitialTemperature()
     }
     
     private func fetchInitialTemperature() {
-        if let path = Bundle.main.path(forResource: "matosinhos_water_temperatures", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
-                if let jsonResult = jsonResult as? Dictionary<String, AnyObject>,
-                   let temperatures = jsonResult["temperatures"] as? [String: Double] {
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MM-dd"
-                    let currentDate = dateFormatter.string(from: Date())
-                    
-                    if let tempValue = temperatures[currentDate] {
-                        let temperatureString = String(format: "%.1f", tempValue)
-                        DispatchQueue.main.async {
-                            self.waterTemperature = temperatureString
-                            // Don't set lastUpdated here
+        // First, check for saved temperature from previous session
+        if let savedTemp = UserDefaults.standard.string(forKey: "lastWaterTemperature") {
+            DispatchQueue.main.async {
+                self.waterTemperature = savedTemp
+                if let savedTime = UserDefaults.standard.string(forKey: "lastUpdatedTime") {
+                    self.lastUpdated = savedTime
+                }
+            }
+        } else {
+            // If no saved temperature, use JSON data
+            if let path = Bundle.main.path(forResource: "matosinhos_water_temperatures", ofType: "json") {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                    let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
+                    if let jsonResult = jsonResult as? Dictionary<String, AnyObject>,
+                       let temperatures = jsonResult["temperatures"] as? [String: Double] {
+                        
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "MM-dd"
+                        let currentDate = dateFormatter.string(from: Date())
+                        
+                        if let tempValue = temperatures[currentDate] {
+                            let temperatureString = String(format: "%.1f", tempValue)
+                            DispatchQueue.main.async {
+                                self.waterTemperature = temperatureString
+                                // Don't set lastUpdated here
+                            }
                         }
                     }
+                } catch {
+                    print("Error reading or parsing matosinhos_water_temperatures.json: \(error)")
                 }
-            } catch {
-                print("Error reading or parsing matosinhos_water_temperatures.json: \(error)")
             }
         }
+        
+        // After setting initial temperature, check for updates
+        checkTemperature()
     }
     
     func checkTemperature() {
