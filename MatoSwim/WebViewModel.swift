@@ -57,15 +57,20 @@ class WebViewModel: NSObject, ObservableObject {
     }
     
     func checkTemperature() {
+        print("Checking temperature")
         guard let url = URL(string: "https://beachcam.meo.pt/livecams/praia-de-matosinhos/") else { return }
         webView.load(URLRequest(url: url))
     }
     
     private func parseHTML(_ html: String) {
+        print("Received HTML content length: \(html.count)")
+        
         do {
             let document: Document = try SwiftSoup.parse(html)
             let temperatureElement = try document.select("li.liveCamsHeader__infoList-item:contains(Temp. do mar) p").first()
             if let tempText = try temperatureElement?.text() {
+                print("Found temperature text: \(tempText)")
+                
                 let temperatureInt = Int(tempText.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
                 let temperatureFloat = Float(temperatureInt) / 10.0
                 DispatchQueue.main.async {
@@ -79,8 +84,12 @@ class WebViewModel: NSObject, ObservableObject {
                         // Save the new temperature to UserDefaults
                         UserDefaults.standard.set(newTemperature, forKey: "lastWaterTemperature")
                         UserDefaults.standard.set(self.lastUpdated, forKey: "lastUpdatedTime")
+                        
+                        print("New temperature: \(newTemperature) at \(Date())")
                     }
                 }
+            } else {
+                print("Temperature element not found in HTML")
             }
         } catch {
             DispatchQueue.main.async {
@@ -114,5 +123,9 @@ extension WebViewModel: WKNavigationDelegate {
             }
             self?.parseHTML(html)
         }
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("Web view failed to load: \(error.localizedDescription)")
     }
 }

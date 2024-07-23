@@ -17,20 +17,24 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
-        // Handle background URL session events if needed
+        print("Handling background URL session: \(identifier)")
+        completionHandler()
     }
 
     func handleAppRefresh(task: BGAppRefreshTask) {
+        print("Background refresh started")
         scheduleAppRefresh()
         
         let webViewModel = WebViewModel()
         webViewModel.checkTemperature()
         
         task.expirationHandler = {
+            print("Background task expired")
             task.setTaskCompleted(success: false)
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            print("Background refresh completed")
             task.setTaskCompleted(success: true)
         }
     }
