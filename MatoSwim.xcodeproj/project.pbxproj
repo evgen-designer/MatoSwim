@@ -15,6 +15,7 @@
 		04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20772C4F1C0F0036A68B /* WebViewModel.swift */; };
 		04EE207A2C4F1DCA0036A68B /* matosinhos_water_temperatures.json in Resources */ = {isa = PBXBuildFile; fileRef = 04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */; };
 		04EE207D2C4F8D090036A68B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE207C2C4F8D090036A68B /* AppDelegate.swift */; };
+		04EE207F2C50D27E0036A68B /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE207E2C50D27E0036A68B /* TemperatureView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = matosinhos_water_temperatures.json; sourceTree = "<group>"; };
 		04EE207B2C4F8C630036A68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		04EE207C2C4F8D090036A68B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		04EE207E2C50D27E0036A68B /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				04EE207B2C4F8C630036A68B /* Info.plist */,
 				04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */,
 				04EE20682C4F1AC00036A68B /* ContentView.swift */,
+				04EE207E2C50D27E0036A68B /* TemperatureView.swift */,
 				04EE20772C4F1C0F0036A68B /* WebViewModel.swift */,
 				04EE207C2C4F8D090036A68B /* AppDelegate.swift */,
 				04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */,
@@ -157,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04EE207F2C50D27E0036A68B /* TemperatureView.swift in Sources */,
 				04EE207D2C4F8D090036A68B /* AppDelegate.swift in Sources */,
 				04EE20692C4F1AC00036A68B /* ContentView.swift in Sources */,
 				04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */,
