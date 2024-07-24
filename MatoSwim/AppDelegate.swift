@@ -10,7 +10,7 @@ import BackgroundTasks
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.yourapp.fetchTemperature", using: nil) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.matoswim.fetchTemperature", using: nil) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
         return true
@@ -41,7 +41,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func scheduleAppRefresh() {
-        let request = BGAppRefreshTaskRequest(identifier: "com.yourapp.fetchTemperature")
+        let request = BGAppRefreshTaskRequest(identifier: "com.matoswim.fetchTemperature")
         request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // Fetch every 15 minutes
         do {
             try BGTaskScheduler.shared.submit(request)
