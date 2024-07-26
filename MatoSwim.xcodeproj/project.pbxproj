@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04099A1D2C537FA4009E059E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04099A1C2C537FA4009E059E /* NotificationManager.swift */; };
+		04099A1F2C537FDF009E059E /* WaterAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04099A1E2C537FDF009E059E /* WaterAnimationView.swift */; };
+		04099A212C538043009E059E /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04099A202C538043009E059E /* NotificationsView.swift */; };
+		04099A232C538185009E059E /* CustomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04099A222C538185009E059E /* CustomTabView.swift */; };
 		04EE20672C4F1AC00036A68B /* MatoSwimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */; };
 		04EE20692C4F1AC00036A68B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EE20682C4F1AC00036A68B /* ContentView.swift */; };
 		04EE206B2C4F1AC30036A68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04EE206A2C4F1AC30036A68B /* Assets.xcassets */; };
@@ -19,6 +23,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04099A1C2C537FA4009E059E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		04099A1E2C537FDF009E059E /* WaterAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterAnimationView.swift; sourceTree = "<group>"; };
+		04099A202C538043009E059E /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		04099A222C538185009E059E /* CustomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabView.swift; sourceTree = "<group>"; };
 		04EE20632C4F1AC00036A68B /* MatoSwim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MatoSwim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatoSwimApp.swift; sourceTree = "<group>"; };
 		04EE20682C4F1AC00036A68B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,8 +73,12 @@
 				04EE207B2C4F8C630036A68B /* Info.plist */,
 				04EE20662C4F1AC00036A68B /* MatoSwimApp.swift */,
 				04EE20682C4F1AC00036A68B /* ContentView.swift */,
+				04099A222C538185009E059E /* CustomTabView.swift */,
 				04EE207E2C50D27E0036A68B /* TemperatureView.swift */,
+				04099A202C538043009E059E /* NotificationsView.swift */,
+				04099A1E2C537FDF009E059E /* WaterAnimationView.swift */,
 				04EE20772C4F1C0F0036A68B /* WebViewModel.swift */,
+				04099A1C2C537FA4009E059E /* NotificationManager.swift */,
 				04EE207C2C4F8D090036A68B /* AppDelegate.swift */,
 				04EE20792C4F1DCA0036A68B /* matosinhos_water_temperatures.json */,
 				04EE206A2C4F1AC30036A68B /* Assets.xcassets */,
@@ -160,11 +172,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04099A1D2C537FA4009E059E /* NotificationManager.swift in Sources */,
+				04099A1F2C537FDF009E059E /* WaterAnimationView.swift in Sources */,
 				04EE207F2C50D27E0036A68B /* TemperatureView.swift in Sources */,
 				04EE207D2C4F8D090036A68B /* AppDelegate.swift in Sources */,
 				04EE20692C4F1AC00036A68B /* ContentView.swift in Sources */,
 				04EE20782C4F1C0F0036A68B /* WebViewModel.swift in Sources */,
+				04099A232C538185009E059E /* CustomTabView.swift in Sources */,
 				04EE20672C4F1AC00036A68B /* MatoSwimApp.swift in Sources */,
+				04099A212C538043009E059E /* NotificationsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

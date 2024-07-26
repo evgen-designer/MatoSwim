@@ -5,7 +5,6 @@
 //  Created by Mac on 23/07/2024.
 //
 
-import UserNotifications
 import WebKit
 import SwiftSoup
 import Foundation
@@ -20,10 +19,10 @@ class WebViewModel: NSObject, ObservableObject {
         }
     }
     @Published var notificationsEnabled: Bool = false {
-            didSet {
-                UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
-            }
+        didSet {
+            UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
         }
+    }
     private var temperatureLog: [String] = []
     
     override init() {
@@ -136,7 +135,8 @@ class WebViewModel: NSObject, ObservableObject {
             DispatchQueue.main.async {
                 print("Error parsing HTML: \(error)")
             }
-        }    }
+        }
+    }
     
     private func getCurrentTime() -> String {
         let dateFormatter = DateFormatter()
@@ -155,19 +155,7 @@ class WebViewModel: NSObject, ObservableObject {
     
     private func sendNotification(temperature: Double) {
         guard notificationsEnabled else { return }
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Water Temperature Alert"
-        content.body = "The water temperature in Matosinhos is now \(String(format: "%.1f", temperature))°C!"
-        content.sound = UNNotificationSound.default
-
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error sending notification: \(error)")
-            }
-        }
+        NotificationManager.shared.sendNotification(temperature: temperature)
     }
 }
 
