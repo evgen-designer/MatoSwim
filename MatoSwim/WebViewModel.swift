@@ -8,51 +8,58 @@
 import WebKit
 import SwiftSoup
 import Foundation
+import Combine
 
 class WebViewModel: NSObject, ObservableObject {
+    static let shared = WebViewModel()
+        @Published var temperatureData: [String: Double] = [:]
+    
     private let webView: WKWebView
     @Published var waterTemperature: String?
     @Published var lastUpdated: String?
     @Published var temperatureThreshold: Double = 18.0 {
         didSet {
             UserDefaults.standard.set(temperatureThreshold, forKey: "temperatureThreshold")
+            checkAndScheduleNotification()
         }
     }
     @Published var notificationsEnabled: Bool = false {
         didSet {
             UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
+            if notificationsEnabled {
+                checkAndScheduleNotification()
+            } else {
+                notificationWorkItem?.cancel()
+            }
         }
     }
     private var temperatureLog: [String] = []
+    private var notificationWorkItem: DispatchWorkItem?
+    private var lastNotificationTime: Date?
     
     override init() {
         let config = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: config)
         
-        // Initialize temperatureThreshold before calling super.init()
         self.temperatureThreshold = UserDefaults.standard.double(forKey: "temperatureThreshold")
         self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
         
         super.init()
         
-        // If there's no saved threshold, use the default value
         if self.temperatureThreshold == 0 {
             self.temperatureThreshold = 18.0
         }
         
         webView.navigationDelegate = self
         
-        // Load temperature every 15 minutes in the background
         Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { [weak self] _ in
             self?.checkTemperature()
         }
         
-        // Load initial temperature
         fetchInitialTemperature()
     }
     
     private func fetchInitialTemperature() {
-        // First, check for saved temperature from previous session
         if let savedTemp = UserDefaults.standard.string(forKey: "lastWaterTemperature") {
             DispatchQueue.main.async {
                 self.waterTemperature = savedTemp
@@ -61,7 +68,6 @@ class WebViewModel: NSObject, ObservableObject {
                 }
             }
         } else {
-            // If no saved temperature, use JSON data
             if let path = Bundle.main.path(forResource: "matosinhos_water_temperatures", ofType: "json") {
                 do {
                     let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
@@ -77,7 +83,6 @@ class WebViewModel: NSObject, ObservableObject {
                             let temperatureString = String(format: "%.1f", tempValue)
                             DispatchQueue.main.async {
                                 self.waterTemperature = temperatureString
-                                // Don't set lastUpdated here
                             }
                         }
                     }
@@ -87,7 +92,6 @@ class WebViewModel: NSObject, ObservableObject {
             }
         }
         
-        // After setting initial temperature, check for updates
         checkTemperature()
     }
     
@@ -103,13 +107,11 @@ class WebViewModel: NSObject, ObservableObject {
         do {
             let document: Document = try SwiftSoup.parse(html)
             let temperatureElement = try document.select("li.liveCamsHeader__infoList-item:contains(Temp. do mar) p").first()
-            
             if let tempText = try temperatureElement?.text() {
                 print("Found temperature text: \(tempText)")
                 
                 let temperatureInt = Int(tempText.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-                let temperatureDouble = Double(temperatureInt) / 10.0  // Changed to Double
-                
+                let temperatureDouble = Double(temperatureInt) / 10.0
                 DispatchQueue.main.async {
                     let newTemperature = String(format: "%.1f", temperatureDouble)
                     if newTemperature != self.waterTemperature {
@@ -122,10 +124,7 @@ class WebViewModel: NSObject, ObservableObject {
                         
                         print("New temperature: \(newTemperature) at \(Date())")
                         
-                        // Check if temperature is equal to or greater than the threshold
-                        if self.notificationsEnabled && temperatureDouble >= self.temperatureThreshold {
-                            NotificationManager.shared.sendNotification(temperature: temperatureDouble)
-                        }
+                        self.checkAndScheduleNotification()
                     }
                 }
             } else {
@@ -153,9 +152,36 @@ class WebViewModel: NSObject, ObservableObject {
         }
     }
     
-    private func sendNotification(temperature: Double) {
+    func checkAndScheduleNotificationIfNeeded() {
+            checkAndScheduleNotification()
+        }
+    
+    private func checkAndScheduleNotification() {
         guard notificationsEnabled else { return }
-        NotificationManager.shared.sendNotification(temperature: temperature)
+        
+        notificationWorkItem?.cancel()
+        
+        if let currentTemp = Double(waterTemperature ?? "0"), currentTemp >= temperatureThreshold {
+            let workItem = DispatchWorkItem { [weak self] in
+                guard let self = self else { return }
+                
+                if let currentTemp = Double(self.waterTemperature ?? "0"),
+                   currentTemp >= self.temperatureThreshold,
+                   self.notificationsEnabled {
+                    
+                    if let lastTime = self.lastNotificationTime,
+                       Date().timeIntervalSince(lastTime) < 60 {
+                        return
+                    }
+                    
+                    NotificationManager.shared.sendNotification(temperature: currentTemp)
+                    self.lastNotificationTime = Date()
+                }
+            }
+            
+            notificationWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: workItem)
+        }
     }
 }
 

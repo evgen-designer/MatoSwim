@@ -9,8 +9,16 @@ import UIKit
 import BackgroundTasks
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.matoswim.fetchTemperature", using: nil) { task in
+            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+        }
+        return true
+    }
+    
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         print("Handling background URL session: \(identifier)")
+        WebViewModel.shared.checkAndScheduleNotificationIfNeeded()
         completionHandler()
     }
 
@@ -18,8 +26,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         print("Background refresh started")
         scheduleAppRefresh()
         
-        let webViewModel = WebViewModel()
-        webViewModel.checkTemperature()
+        WebViewModel.shared.checkTemperature()
         
         task.expirationHandler = {
             print("Background task expired")
@@ -27,11 +34,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         // Wait for the temperature check to complete
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             print("Background refresh completed")
             task.setTaskCompleted(success: true)
         }
     }
+
 
     func scheduleAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: "com.matoswim.fetchTemperature")

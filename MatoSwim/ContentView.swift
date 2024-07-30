@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var webViewModel = WebViewModel()
+    @StateObject private var webViewModel = WebViewModel.shared
     @State private var selectedTab = 0
     
     var body: some View {
