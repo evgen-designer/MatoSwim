@@ -24,9 +24,10 @@ class NotificationManager {
     
     func sendNotification(temperature: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "Water Temperature Alert"
-        content.body = "The water temperature in Matosinhos is now \(String(format: "%.1f", temperature))°C!"
+        content.title = "Water temperature is \(String(format: "%.1f", temperature))°C"
+        content.body = "Hurry up! The water is perfect for swimming!"
         content.sound = UNNotificationSound.default
+        content.badge = 1 as NSNumber
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         

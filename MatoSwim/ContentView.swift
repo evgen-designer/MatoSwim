@@ -32,9 +32,18 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .onAppear {
-            NotificationManager.shared.requestAuthorization()
-        }
+                    NotificationManager.shared.requestAuthorization()
+                    clearBadge()
+                }
     }
+    
+    private func clearBadge() {
+            UNUserNotificationCenter.current().setBadgeCount(0) { error in
+                if let error = error {
+                    print("Error clearing badge: \(error)")
+                }
+            }
+        }
 }
 
 #Preview {

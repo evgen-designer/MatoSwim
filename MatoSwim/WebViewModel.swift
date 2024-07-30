@@ -103,28 +103,28 @@ class WebViewModel: NSObject, ObservableObject {
         do {
             let document: Document = try SwiftSoup.parse(html)
             let temperatureElement = try document.select("li.liveCamsHeader__infoList-item:contains(Temp. do mar) p").first()
+            
             if let tempText = try temperatureElement?.text() {
                 print("Found temperature text: \(tempText)")
                 
                 let temperatureInt = Int(tempText.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
                 let temperatureDouble = Double(temperatureInt) / 10.0  // Changed to Double
+                
                 DispatchQueue.main.async {
                     let newTemperature = String(format: "%.1f", temperatureDouble)
-                    // Only update if the new temperature is different
                     if newTemperature != self.waterTemperature {
                         self.waterTemperature = newTemperature
                         self.lastUpdated = self.getCurrentTime()
                         self.temperatureLog.append(newTemperature)
                         
-                        // Save the new temperature to UserDefaults
                         UserDefaults.standard.set(newTemperature, forKey: "lastWaterTemperature")
                         UserDefaults.standard.set(self.lastUpdated, forKey: "lastUpdatedTime")
                         
                         print("New temperature: \(newTemperature) at \(Date())")
                         
-                        // Check if temperature exceeds threshold
-                        if temperatureDouble > self.temperatureThreshold {
-                            self.sendNotification(temperature: temperatureDouble)
+                        // Check if temperature is equal to or greater than the threshold
+                        if self.notificationsEnabled && temperatureDouble >= self.temperatureThreshold {
+                            NotificationManager.shared.sendNotification(temperature: temperatureDouble)
                         }
                     }
                 }
